@@ -480,7 +480,41 @@ Public Function getElementByID(strID As String) As CDPElement
     
 End Function
  
- 
+Public Function getElementsByName(strName As String) As Collection
+'----------------------------------------------------------------------------------
+' Get a collection of elements by QuerySelectorAll. The syntax is as below:
+' https://developer.mozilla.org/en-US/docs/Web/API/XPathResult/iterateNext
+' Note that index for accessing the collection members start at one (not zero).
+' Updated: 02/03/2023
+' ---------------------------------------------------------------------------------
+' Modified by William Kreider from original code 'getElementByXPath' function
+' Updated: 06/09/2023
+'----------------------------------------------------------------------------------
+           
+   'Get a new unique varID
+    Dim varID As String: varID = newVarID & "s"     's to signify a collection varID
+           
+   'Get the object and assign to the varID in the browser
+    result = jsEval(varID & " = document.querySelectorAll('[name=""" & strName & """]');")
+    
+   'Return result
+    If result = "null" Then Exit Function Else Set elements = New Collection
+            
+   'Store element members to the collection
+    Dim tElem As CDPElement
+    Dim varJS As String                                 'Store each new member access JS string
+    length_ = jsEval(varID & ".length")
+    For N = 0 To length_ - 1                            'HTML index starts at zero
+        varJS = varID & ".item(" & N & ")"
+        Set tElement = New CDPElement
+        tElement.init Me, varIDs, varJS_:=varJS
+        elements.Add tElement
+    Next
+    Set getElementsByName = elements
+    
+End Function
+                                                
+                                                
 Public Function getElementByQuery(strQuery As String) As CDPElement
 '----------------------------------------------------------------------------------
 ' Obtain an element that is the child of the current element using QuerySelector.
