@@ -39,48 +39,11 @@ Sub runEdge()
    'If reAttach = False, .start will not automatically try to reattach
    'to previous instances open by CDP but will start a brand new instead.
     Dim objBrowser As New CDPBrowser
-    Dim HTMLDoc As New HTMLDocument
-    Dim CDPWebElement As New Collection
     
-    Dim objTable As Object
-    Dim objTable2 As Object
-    
-    'objBrowser.start "edge", cleanActive:=True, reAttach:=False, addArgs:="--new-window"
     objBrowser.start "edge", cleanActive:=True, reAttach:=True
- 
-   'Navigate and wait
-   'If till argument is omitted, will by default wait until ReadyState = complete
-    ' https://www.isograd-testingservices.com/EN/testdetails?sbj_fam_id=15
-    'objBrowser.navigate "https://livingwaters.com/movie/the-atheist-delusion/", isInteractive
- 
-    objBrowser.navigate "https://wsso-support.web.boeing.com:2016/redirect.html?URL=http://desktopportal.web.boeing.com/Inventory/Grading.aspx", isComplete
-    objBrowser.wait
     
-    objBrowser.sleep 5
-    
-    HTMLDoc.body.innerHTML = objBrowser.jsEval("document.body.innerHTML;") ' objIE.document.body.innerHTML
-    
-    Set CDPWebElement = objBrowser.getElementsByName("ScannedSerial")
-    objBrowser.wait
-    
-    CDPWebElement(1).value = "SomeAssetTagHere"
-'    Debug.Print CDPWebElement.innerText = "SomeTag"
-'    With HTMLDoc
-'        Set objTable = .getElementsByTagName("body")
-'        Set objTable2 = .getElementByID("sbj_or_sbj_fam_id")
-'        Debug.Print objTable2(1).innerText
-'    End With
-'    Set objDoc = objBrowser
-    'objDoc.all.tags('select').Item(0)
-'    Set objSelect = objBrowser.jsEval("document.all.tags('select').Item(0);")
-'    Set objListItems = objBrowser.getElementByID("sbj_or_sbj_fam_id")
-    
-'    Debug.Print objListItems.innerHTML
-    
-    ' sbj_or_sbj_fam_id
-   'Get view count
-    'viewCount = objBrowser.jsEval("document.evaluate(""//h3[contains(., 'Total Views')]/*[1]"", document).iterateNext().innerText")
-    'objBrowser.jsEval "alert(""This free movie has already reached " & viewCount & " views! Wow!"")"
+    viewCount = objBrowser.jsEval("document.evaluate(""//h3[contains(., 'Total Views')]/*[1]"", document).iterateNext().innerText")
+    objBrowser.jsEval "alert(""This free movie has already reached " & viewCount & " views! Wow!"")"
     
  
 End Sub
@@ -330,10 +293,6 @@ Sub switchMain()
 '    Dim objBrowser As New CDPBrowser
     Dim HTMLDoc As New HTMLDocument
     Dim CDPWebElement As New Collection
-    
-    Dim objTable As Object
-    Dim objTable2 As Object
-
 
     Dim chrome As New CDPBrowser
     'chrome.start "edge", cleanActive:=True, reAttach:=True, addArgs:="--new-window"
@@ -342,14 +301,6 @@ Sub switchMain()
     chrome.getTab("about:blank").closeTab       'prior 2.7, the next line will throw an error due to no main-switching mechanism
     chrome.printParams
 
-    chrome.navigate "https://wsso-support.web.boeing.com:2016/redirect.html?URL=http://desktopportal.web.boeing.com/Inventory/Grading.aspx", isComplete
     chrome.wait
-    
-    chrome.sleep 5
-    
-    HTMLDoc.body.innerHTML = chrome.jsEval("document.body.innerHTML;") ' objIE.document.body.innerHTML
-    
-    Set CDPWebElement = chrome.getElementsByName("ScannedSerial")
-    chrome.wait
-    CDPWebElement(0).value = "NewAssetTagHere"
+
 End Sub
